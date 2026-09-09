@@ -57,40 +57,40 @@
     
     <div class="features-grid">
       <!-- Card 1 -->
-      <div class="feature-card">
+      <a href="app.html?type=compression" class="feature-card">
         <div class="card-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M 8 4 h 8 l -8 4 l 8 4 l -8 4 l 8 4 h -8"/></svg>
         </div>
         <h3>Compression</h3>
         <p>Design precision compression springs with multiple end types including Open, Closed (Squared), and perfectly flush Closed & Ground ends.</p>
-      </div>
+      </a>
       
       <!-- Card 2 -->
-      <div class="feature-card">
+      <a href="app.html?type=extension" class="feature-card">
         <div class="card-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M 12 3 a 2 2 0 0 0 0 4 l -4 2 l 8 3 l -8 3 l 4 2 a 2 2 0 0 1 0 4"/></svg>
         </div>
         <h3>Extension</h3>
         <p>Configure extension springs with mathematically perfect German (Machine) loops that transition smoothly without sharp edges.</p>
-      </div>
+      </a>
 
       <!-- Card 3 -->
-      <div class="feature-card">
+      <a href="app.html?type=torsion" class="feature-card">
         <div class="card-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M 18 6 H 10 A 4 4 0 1 0 14 10 V 18" /><circle cx="10" cy="10" r="1.5" /></svg>
         </div>
         <h3>Torsion</h3>
         <p>Model standard torsion springs with fully adjustable tangentially exiting legs, eliminating unnatural kinks and bends.</p>
-      </div>
+      </a>
 
       <!-- Card 4 -->
-      <div class="feature-card">
+      <a href="app.html?type=doubleTorsion" class="feature-card">
         <div class="card-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v18m-7-9h14"/></svg>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="7" cy="13" r="3" /><circle cx="7" cy="13" r="1" /><circle cx="17" cy="13" r="3" /><circle cx="17" cy="13" r="1" /><path d="M 4 13 v 6" /><path d="M 20 13 v 6" /><path d="M 7 10 v -3 a 2 2 0 0 1 2 -2 h 6 a 2 2 0 0 1 2 2 v 3" /></svg>
         </div>
         <h3>Double Torsion</h3>
         <p>Complex double torsion configurations featuring left and right-hand coils unified by a smooth radial U-turn bridge.</p>
-      </div>
+      </a>
     </div>
   </section>
 
@@ -128,5 +128,23 @@
     </div>
   </footer>
 
+  <script>
+    // Interactive mouse tracking for the fluid shader-like gradients
+    document.querySelectorAll('.feature-card').forEach(card => {
+      card.addEventListener('mousemove', e => {
+        const rect = card.getBoundingClientRect();
+        const x = ((e.clientX - rect.left) / rect.width) * 100;
+        const y = ((e.clientY - rect.top) / rect.height) * 100;
+        card.style.setProperty('--mouse-x', `${x}%`);
+        card.style.setProperty('--mouse-y', `${y}%`);
+      });
+      // Optional: reset when mouse leaves
+      card.addEventListener('mouseleave', () => {
+        card.style.setProperty('--mouse-x', `50%`);
+        card.style.setProperty('--mouse-y', `50%`);
+      });
+    });
+  </script>
 </body>
 </html>
+

@@ -209,22 +209,77 @@ body {
 
 .features-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  grid-template-columns: repeat(4, 1fr);
   gap: 1.5rem;
 }
 
+@media (max-width: 1024px) {
+  .features-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .features-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
 .feature-card {
+  position: relative;
+  display: block;
+  text-decoration: none;
+  color: inherit;
   background: var(--card-bg);
   border: 1px solid var(--border);
   padding: 2rem;
   border-radius: 12px;
-  transition: transform 0.2s, background 0.2s;
+  overflow: hidden;
+  transition: transform 0.2s, border-color 0.2s;
+  /* setup variables for JS to update */
+  --mouse-x: 50%;
+  --mouse-y: 50%;
+}
+
+.feature-card::before {
+  content: "";
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  /* Mesh gradient mimicking shadergradient */
+  background: 
+    radial-gradient(circle at var(--mouse-x) var(--mouse-y), rgba(59, 130, 246, 0.3) 0%, transparent 40%),
+    radial-gradient(circle at calc(100% - var(--mouse-x)) calc(100% - var(--mouse-y)), rgba(139, 92, 246, 0.3) 0%, transparent 40%),
+    radial-gradient(circle at 50% 50%, rgba(236, 72, 153, 0.2) 0%, transparent 50%);
+  background-blend-mode: screen;
+  opacity: 0;
+  z-index: 0;
+  transition: opacity 0.4s ease;
+  pointer-events: none;
+}
+
+.feature-card > * {
+  position: relative;
+  z-index: 1; /* keep content above gradient */
 }
 
 .feature-card:hover {
   transform: translateY(-5px);
-  background: rgba(255, 255, 255, 0.05);
-  border-color: rgba(255,255,255,0.2);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.feature-card:hover::before {
+  opacity: 1;
+  animation: mesh-spin 8s linear infinite;
+}
+
+@keyframes mesh-spin {
+  0% { transform: rotate(0deg) scale(1); }
+  33% { transform: rotate(120deg) scale(1.1); }
+  66% { transform: rotate(240deg) scale(0.9); }
+  100% { transform: rotate(360deg) scale(1); }
 }
 
 .card-icon {

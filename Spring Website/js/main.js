@@ -245,7 +245,15 @@ function init() {
   });
 
   // ---- First render ------------------------------------------------------
-  panel.setSpringType('compression');
+  const urlParams = new URLSearchParams(window.location.search);
+  const initialType = urlParams.get('type') || 'compression';
+  const initialTab = document.querySelector(`.tab[data-type="${initialType}"]`);
+  
+  if (initialTab) {
+    initialTab.click();
+  } else {
+    panel.setSpringType('compression');
+  }
 }
 
 /**
