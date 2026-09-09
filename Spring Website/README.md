@@ -1,4 +1,4 @@
-# ⚙ Spring Design Preview
+# Spring Design Preview
 
 An interactive 3D spring design tool powered by **Three.js**. Visualize and parameterize three spring types in real time by dragging sliders.
 
