@@ -117,6 +117,72 @@
     </div>
   </section>
 
+  <!-- FEA Simulation Section -->
+  <section class="fea-section">
+    <div class="section-header">
+      <h2>Advanced FEA Simulation</h2>
+      <p>Visualizing mechanical stress and deformation under load to validate compression spring integrity.</p>
+    </div>
+
+    <div class="fea-grid">
+      <!-- FEA Video/Image Card 1 -->
+      <div class="fea-card">
+        <div class="fea-media">
+          <video autoplay loop muted playsinline poster="FEA/Screenshot (104).png">
+            <source src="FEA/Part2EqStress.avi" type="video/x-msvideo">
+            <source src="FEA/Part2EqStress2.avi" type="video/x-msvideo">
+            <img src="FEA/Screenshot (104).png" alt="Equivalent Stress FEA">
+          </video>
+          <div class="fea-badge stress">Eq. Stress (Von Mises)</div>
+        </div>
+        <div class="fea-info">
+          <h3>Stress Distribution Analysis</h3>
+          <p>Highlighting maximum stress concentration points along the inner coils during peak compression.</p>
+          <div class="fea-stats">
+            <div class="stat"><span class="label">Max Stress</span><span class="value stress-val">420 MPa</span></div>
+            <div class="stat"><span class="label">Safety Factor</span><span class="value">1.8</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- FEA Video/Image Card 2 -->
+      <div class="fea-card">
+        <div class="fea-media">
+          <video autoplay loop muted playsinline poster="FEA/Screenshot (105).png">
+            <source src="FEA/Part2TotalDef.wmv" type="video/x-ms-wmv">
+            <source src="FEA/Part2TotalDef.avi" type="video/x-msvideo">
+            <img src="FEA/Screenshot (105).png" alt="Total Deformation FEA">
+          </video>
+          <div class="fea-badge def">Total Deformation</div>
+        </div>
+        <div class="fea-info">
+          <h3>Deflection Simulation</h3>
+          <p>Tracking the physical displacement of the spring coils throughout the full load cycle.</p>
+          <div class="fea-stats">
+            <div class="stat"><span class="label">Max Deflection</span><span class="value def-val">12.5 mm</span></div>
+            <div class="stat"><span class="label">Strain Energy</span><span class="value">45 mJ</span></div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- FEA Static Analysis Card -->
+      <div class="fea-card">
+        <div class="fea-media">
+          <img src="FEA/Screenshot (106).png" alt="Static Structural Analysis">
+          <div class="fea-badge static">Static Structural</div>
+        </div>
+        <div class="fea-info">
+          <h3>Boundary Conditions</h3>
+          <p>Grounding flat ends and applying longitudinal forces to accurately map the load behavior.</p>
+          <div class="fea-stats">
+            <div class="stat"><span class="label">Applied Force</span><span class="value">500 N</span></div>
+            <div class="stat"><span class="label">Mesh Nodes</span><span class="value">124,500</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- Footer -->
   <footer>
     <div class="footer-content">
@@ -138,13 +204,92 @@
         card.style.setProperty('--mouse-x', `${x}%`);
         card.style.setProperty('--mouse-y', `${y}%`);
       });
-      // Optional: reset when mouse leaves
       card.addEventListener('mouseleave', () => {
         card.style.setProperty('--mouse-x', `50%`);
         card.style.setProperty('--mouse-y', `50%`);
       });
     });
+
+    // FEA Fullscreen Hover Effect
+    const lightbox = document.createElement('div');
+    lightbox.className = 'fea-lightbox';
+    document.body.appendChild(lightbox);
+
+    document.querySelectorAll('.fea-card').forEach(card => {
+      const media = card.querySelector('.fea-media');
+      let clone = null;
+      let timeout;
+
+      card.addEventListener('mouseenter', () => {
+        clearTimeout(timeout);
+        // Get exact position of the media element
+        const rect = media.getBoundingClientRect();
+        
+        // Clone the inner media (video or img)
+        const innerMedia = media.querySelector('video') || media.querySelector('img');
+        clone = innerMedia.cloneNode(true);
+        
+        if(clone.tagName === 'VIDEO') {
+          clone.currentTime = innerMedia.currentTime; // Sync playback
+          clone.play();
+        }
+
+        // Initial setup for FLIP animation
+        lightbox.innerHTML = '';
+        lightbox.appendChild(clone);
+        lightbox.style.display = 'block';
+        
+        // Set initial position matching the original card exactly
+        clone.style.position = 'absolute';
+        clone.style.top = `${rect.top}px`;
+        clone.style.left = `${rect.left}px`;
+        clone.style.width = `${rect.width}px`;
+        clone.style.height = `${rect.height}px`;
+        clone.style.objectFit = 'contain';
+        clone.style.transition = 'all 0.5s cubic-bezier(0.4, 0, 0.2, 1)';
+        clone.style.zIndex = '10000';
+        clone.style.borderRadius = '12px 12px 0 0';
+
+        // Background fade
+        lightbox.style.backgroundColor = 'rgba(0,0,0,0)';
+        lightbox.style.transition = 'background-color 0.5s ease';
+        
+        // Trigger reflow
+        clone.getBoundingClientRect();
+
+        // Animate to full screen
+        clone.style.top = '5vh';
+        clone.style.left = '5vw';
+        clone.style.width = '90vw';
+        clone.style.height = '90vh';
+        clone.style.borderRadius = '20px';
+        lightbox.style.backgroundColor = 'rgba(0,0,0,0.85)';
+        lightbox.style.zIndex = '9999';
+      });
+
+      card.addEventListener('mouseleave', () => {
+        if (!clone) return;
+        
+        // Animate back
+        const rect = media.getBoundingClientRect();
+        clone.style.top = `${rect.top}px`;
+        clone.style.left = `${rect.left}px`;
+        clone.style.width = `${rect.width}px`;
+        clone.style.height = `${rect.height}px`;
+        clone.style.borderRadius = '12px 12px 0 0';
+        lightbox.style.backgroundColor = 'rgba(0,0,0,0)';
+
+        timeout = setTimeout(() => {
+          lightbox.style.display = 'none';
+          lightbox.innerHTML = '';
+          clone = null;
+        }, 500); // match transition duration
+      });
+    });
   </script>
 </body>
 </html>
+
+
+
 

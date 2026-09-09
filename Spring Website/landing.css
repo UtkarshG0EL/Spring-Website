@@ -375,6 +375,131 @@ body {
   font-weight: 600;
 }
 
+/* FEA Section */
+.fea-section {
+  padding: 6rem 5%;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.fea-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+}
+
+.fea-card {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden; /* Or we might need to change this for fullscreen */
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.2s, box-shadow 0.2s;
+  position: relative;
+}
+
+.fea-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+}
+
+.fea-media {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4/3;
+  background: #000;
+  border-bottom: 1px solid var(--border);
+}
+
+.fea-media video,
+.fea-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  cursor: pointer;
+}
+
+.fea-badge {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  padding: 0.3rem 0.8rem;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  color: #fff;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+}
+
+.fea-badge.stress { background: linear-gradient(135deg, #ef4444, #b91c1c); }
+.fea-badge.def { background: linear-gradient(135deg, #3b82f6, #1d4ed8); }
+.fea-badge.static { background: linear-gradient(135deg, #10b981, #047857); }
+
+.fea-info {
+  padding: 1.5rem;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.fea-info h3 {
+  font-size: 1.2rem;
+  margin-bottom: 0.5rem;
+}
+
+.fea-info p {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  margin-bottom: 1.5rem;
+  flex-grow: 1;
+}
+
+.fea-stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  background: rgba(0,0,0,0.2);
+  padding: 1rem;
+  border-radius: 8px;
+}
+
+.fea-lightbox {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none; /* Let hover events pass through to the underlying card */
+  z-index: 9999;
+  display: none;
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.stat .label {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.stat .value {
+  font-size: 1.1rem;
+  font-weight: 600;
+  font-family: monospace;
+}
+
+.stat .value.stress-val { color: #ef4444; }
+.stat .value.def-val { color: #3b82f6; }
+
 /* Footer */
 footer {
   padding: 3rem 5%;
@@ -401,5 +526,15 @@ footer {
 @media (max-width: 768px) {
   .engineering-section {
     grid-template-columns: 1fr;
+  }
+  
+  .fea-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 1024px) and (min-width: 769px) {
+  .fea-grid {
+    grid-template-columns: repeat(2, 1fr);
   }
 }
