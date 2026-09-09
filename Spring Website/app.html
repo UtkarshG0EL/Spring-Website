@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Spring Design Preview</title>
+  <link rel="stylesheet" href="style.css">
+
+  <script type="importmap">
+  {
+    "imports": {
+      "three":          "https://cdn.jsdelivr.net/npm/three@0.168.0/build/three.module.js",
+      "three/addons/":  "https://cdn.jsdelivr.net/npm/three@0.168.0/examples/jsm/"
+    }
+  }
+  </script>
+</head>
+<body>
+  <div class="app">
+
+    <!-- ===== Header ===== -->
+    <header class="app-header">
+      <div class="logo">
+        <span class="logo-icon">⚙</span>
+        <span>Spring Design Preview</span>
+        <span class="logo-sub">Three.js · Parametric 3D</span>
+      </div>
+
+      <div class="spring-tabs" role="tablist">
+        <button class="tab active" data-type="compression" role="tab">Compression</button>
+        <button class="tab"        data-type="extension"   role="tab">Extension</button>
+        <button class="tab"        data-type="torsion"     role="tab">Torsion</button>
+        <button class="tab"        data-type="doubleTorsion" role="tab">Double Torsion</button>
+      </div>
+
+      <!-- View toggle: Parametric ↔ CAD Reference -->
+      <div class="view-toggle" id="view-toggle" title="Switch between live parametric preview and your uploaded CAD model">
+        <button class="toggle-btn active" id="btn-parametric" data-view="parametric">
+          ⬡ Parametric
+        </button>
+        <button class="toggle-btn" id="btn-cad" data-view="cad">
+          📐 CAD Reference
+        </button>
+      </div>
+
+      <!-- Extension spring: choose which GLB variant -->
+      <div class="cad-variant" id="cad-variant" style="display:none">
+        <select id="ext-glb-select" title="Select extension spring variant">
+          <option value="Part3Assembly.glb">Part 3 — Assembly</option>
+          <option value="Part4Final.glb">Part 4 — Final</option>
+        </select>
+      </div>
+
+      <!-- Light / dark mode toggle -->
+      <button class="theme-toggle" id="theme-toggle" title="Toggle light / dark mode">🌙</button>
+    </header>
+
+    <!-- ===== Body ===== -->
+    <div class="app-body">
+
+      <!-- Left: Controls -->
+      <aside class="control-panel" id="control-panel" aria-label="Spring parameters"></aside>
+
+      <!-- Center: Viewport -->
+      <main class="viewport-container" aria-label="3D spring preview">
+        <canvas id="spring-canvas"></canvas>
+
+        <!-- CAD loading overlay -->
+        <div class="cad-loading" id="cad-loading" style="display:none">
+          <div class="cad-loading-inner">
+            <div class="spinner"></div>
+            <span>Loading CAD model…</span>
+          </div>
+        </div>
+
+        <div class="viewport-hint" aria-hidden="true">
+          🖱 Drag to orbit &nbsp;·&nbsp; Scroll to zoom &nbsp;·&nbsp; Right-drag to pan
+        </div>
+      </main>
+
+      <!-- Right: Properties -->
+      <aside class="props-panel" aria-label="Calculated properties">
+        <p class="section-title">Calculated Properties</p>
+        <div id="props-content"></div>
+
+        <div class="separator"></div>
+        <p class="section-title">Viewport</p>
+        <button class="btn" id="reset-camera">⟳ Reset Camera</button>
+      </aside>
+
+    </div><!-- /app-body -->
+  </div><!-- /app -->
+
+  <script type="module" src="js/main.js?v=17"></script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+

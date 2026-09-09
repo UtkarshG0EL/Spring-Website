@@ -1,0 +1,514 @@
+/* ============================================================
+   style.css — Spring Design Preview
+   Dark engineering-tool theme
+   ============================================================ */
+
+/* --- Reset & variables ---------------------------------------- */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg:          #0d1117;
+  --surface:     #161b22;
+  --surface2:    #21262d;
+  --surface3:    #1c2129;
+  --border:      #30363d;
+  --border-l:    #3d444d;
+
+  --accent:      #58a6ff;
+  --accent-dim:  #388bfd;
+  --accent-glow: rgba(88,166,255,0.15);
+
+  --text:        #e6edf3;
+  --text-muted:  #8b949e;
+  --text-dim:    #6e7681;
+
+  --ok:          #3fb950;
+  --warn:        #d29922;
+  --err:         #f85149;
+
+  --radius:      8px;
+  --radius-sm:   5px;
+  --header-h:    52px;
+  --sidebar-w:   272px;
+  --props-w:     252px;
+  --transition:  0.15s ease;
+
+  /* Three.js scene background — referenced in JS */
+  --scene-bg:    #0d1117;
+}
+
+/* ---- Light theme overrides ----------------------------------- */
+[data-theme="light"] {
+  --bg:          #f6f8fa;
+  --surface:     #ffffff;
+  --surface2:    #eaeef2;
+  --surface3:    #f0f3f6;
+  --border:      #d0d7de;
+  --border-l:    #adb5bd;
+
+  --accent:      #0969da;
+  --accent-dim:  #0550ae;
+  --accent-glow: rgba(9,105,218,0.12);
+
+  --text:        #1f2328;
+  --text-muted:  #656d76;
+  --text-dim:    #848d97;
+
+  --ok:          #1a7f37;
+  --warn:        #9a6700;
+  --err:         #d1242f;
+
+  --scene-bg:    #e8ecf0;
+}
+
+/* ---- Theme toggle button ------------------------------------- */
+.theme-toggle {
+  margin-left: 10px;
+  padding: 5px 10px;
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--text-muted);
+  font-size: 15px;
+  cursor: pointer;
+  transition: all var(--transition);
+  flex-shrink: 0;
+  line-height: 1;
+}
+.theme-toggle:hover {
+  background: var(--surface2);
+  color: var(--text);
+  border-color: var(--border-l);
+}
+
+
+html, body {
+  height: 100%;
+  overflow: hidden;
+  background: var(--bg);
+  color: var(--text);
+  font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
+  font-size: 13px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ============================================================
+   App shell
+   ============================================================ */
+.app {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+/* ---- Header -------------------------------------------------- */
+.app-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  height: var(--header-h);
+  padding: 0 20px;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+  z-index: 10;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--text);
+  font-weight: 600;
+  font-size: 15px;
+  white-space: nowrap;
+}
+.logo-icon { font-size: 18px; }
+.logo-sub  { font-size: 11px; color: var(--text-muted); font-weight: 400; }
+
+/* Spring type tabs */
+.spring-tabs {
+  display: flex;
+  gap: 4px;
+  margin-left: auto;
+}
+
+.tab {
+  padding: 6px 16px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--text-muted);
+  font-size: 13px;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all var(--transition);
+  white-space: nowrap;
+}
+.tab:hover {
+  color: var(--text);
+  border-color: var(--border-l);
+  background: var(--surface2);
+}
+.tab.active {
+  background: var(--accent);
+  color: #000;
+  border-color: var(--accent);
+  font-weight: 600;
+}
+
+/* ---- View toggle: Parametric ↔ CAD Reference ---------------- */
+.view-toggle {
+  display: flex;
+  gap: 0;
+  margin-left: 16px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  flex-shrink: 0;
+}
+.toggle-btn {
+  padding: 5px 13px;
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  font-size: 12px;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all var(--transition);
+  white-space: nowrap;
+}
+.toggle-btn:hover  { background: var(--surface2); color: var(--text); }
+.toggle-btn.active { background: var(--surface2); color: var(--accent); font-weight: 600; }
+.toggle-btn:not(:last-child) { border-right: 1px solid var(--border); }
+
+/* ---- CAD variant selector ----------------------------------- */
+.cad-variant {
+  display: flex;
+  align-items: center;
+  margin-left: 8px;
+}
+.cad-variant select { padding: 5px 8px; font-size: 12px; border-radius: var(--radius-sm); }
+
+/* ---- CAD loading overlay ------------------------------------ */
+.cad-loading {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(13,17,23,0.75);
+  backdrop-filter: blur(4px);
+  z-index: 20;
+}
+.cad-loading-inner {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 14px 22px;
+  color: var(--text-muted);
+  font-size: 14px;
+}
+.spinner {
+  width: 18px; height: 18px;
+  border: 2px solid var(--border);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ---- Body (3 columns) --------------------------------------- */
+.app-body {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+}
+
+/* ---- Left sidebar: Controls --------------------------------- */
+.control-panel {
+  width: var(--sidebar-w);
+  flex-shrink: 0;
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 14px 12px 20px;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) transparent;
+}
+.control-panel::-webkit-scrollbar { width: 5px; }
+.control-panel::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+/* ---- Center: Viewport --------------------------------------- */
+.viewport-container {
+  flex: 1;
+  position: relative;
+  min-width: 0;
+  overflow: hidden;
+  background: var(--scene-bg);
+}
+
+#spring-canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.viewport-hint {
+  position: absolute;
+  bottom: 14px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(13,17,23,0.75);
+  backdrop-filter: blur(6px);
+  color: var(--text-muted);
+  padding: 5px 14px;
+  border-radius: 20px;
+  font-size: 11px;
+  pointer-events: none;
+  white-space: nowrap;
+  border: 1px solid var(--border);
+}
+
+/* ---- Right sidebar: Properties ------------------------------ */
+.props-panel {
+  width: var(--props-w);
+  flex-shrink: 0;
+  background: var(--surface);
+  border-left: 1px solid var(--border);
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 14px 12px 20px;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) transparent;
+}
+.props-panel::-webkit-scrollbar { width: 5px; }
+.props-panel::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+/* ============================================================
+   Shared UI components
+   ============================================================ */
+
+/* Section header */
+.section-title {
+  font-size: 10.5px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+  margin-bottom: 10px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--border);
+}
+
+/* Divider */
+.separator {
+  height: 1px;
+  background: var(--border);
+  margin: 12px 0;
+}
+
+/* Buttons */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  width: 100%;
+  padding: 7px 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface2);
+  color: var(--text-muted);
+  font-size: 12px;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all var(--transition);
+  margin-top: 6px;
+}
+.btn:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+  background: var(--accent-glow);
+}
+
+/* ---- Material selector --------------------------------------- */
+.select-group {
+  margin-bottom: 12px;
+}
+
+select {
+  width: 100%;
+  padding: 6px 10px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--text);
+  font-size: 12px;
+  font-family: inherit;
+  cursor: pointer;
+  transition: border-color var(--transition);
+  appearance: auto;
+}
+select:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+select:hover {
+  border-color: var(--border-l);
+}
+
+/* ---- Slider controls ---------------------------------------- */
+.slider-group {
+  margin-bottom: 14px;
+}
+
+.slider-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 5px;
+}
+
+.slider-label {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.slider-value {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text);
+  min-width: 56px;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Range input */
+input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 4px;
+  background: var(--surface2);
+  border-radius: 2px;
+  cursor: pointer;
+  outline: none;
+  transition: background var(--transition);
+}
+input[type="range"]:hover {
+  background: var(--border);
+}
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 14px;
+  height: 14px;
+  background: var(--accent);
+  border-radius: 50%;
+  cursor: pointer;
+  box-shadow: 0 0 0 2px rgba(88,166,255,0.2);
+  transition: transform var(--transition), box-shadow var(--transition);
+}
+input[type="range"]::-webkit-slider-thumb:hover {
+  transform: scale(1.2);
+  box-shadow: 0 0 0 4px rgba(88,166,255,0.25);
+}
+input[type="range"]::-moz-range-thumb {
+  width: 14px;
+  height: 14px;
+  background: var(--accent);
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+/* Dropdown controls */
+.dropdown-group {
+  margin-bottom: 14px;
+}
+.dropdown-group label {
+  display: block;
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-bottom: 4px;
+}
+
+/* ---- Properties panel cards --------------------------------- */
+.prop-card {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 9px 11px;
+  margin-bottom: 7px;
+  transition: border-color var(--transition);
+}
+.prop-card:hover {
+  border-color: var(--border-l);
+}
+
+.prop-name {
+  font-size: 10.5px;
+  color: var(--text-muted);
+  margin-bottom: 2px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.prop-row {
+  display: flex;
+  align-items: baseline;
+  gap: 5px;
+}
+
+.prop-value {
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--accent);
+  font-variant-numeric: tabular-nums;
+  line-height: 1.2;
+}
+.prop-value.warn  { color: var(--warn); }
+.prop-value.error { color: var(--err);  }
+
+.prop-unit {
+  font-size: 11px;
+  color: var(--text-dim);
+}
+
+/* Warning cards */
+.warning-card {
+  background: rgba(210,153,34,0.08);
+  border: 1px solid rgba(210,153,34,0.4);
+  border-radius: var(--radius-sm);
+  padding: 8px 11px;
+  margin-bottom: 7px;
+  font-size: 11.5px;
+  color: var(--warn);
+  line-height: 1.4;
+}
+.warning-card::before {
+  content: '⚠ ';
+  font-size: 12px;
+}
+
+/* ============================================================
+   Responsive (narrow screens — stack layout)
+   ============================================================ */
+@media (max-width: 860px) {
+  .control-panel { width: 220px; }
+  .props-panel   { width: 200px; }
+}
+@media (max-width: 680px) {
+  .app-body { flex-direction: column; }
+  .control-panel,
+  .props-panel { width: 100%; height: auto; max-height: 35vh; border: none; border-bottom: 1px solid var(--border); }
+  .viewport-container { flex: 1; min-height: 250px; }
+  .spring-tabs .tab { padding: 5px 10px; font-size: 12px; }
+}
